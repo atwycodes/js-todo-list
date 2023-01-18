@@ -3,8 +3,8 @@ class StorageController {
     this.storage = [];
   }
 
-  addToStorage (todo) {
-    this.storage.push(todo);
+  addToStorage (task) {
+    this.storage.push(task);
   }
 
   removeFromStorage (criteria) {
@@ -20,7 +20,7 @@ class StorageController {
   }
 
   filterCategory(category) {
-    return this.storage.filter((todo) => (todo.category === category));
+    return this.storage.filter((task) => (task.category === category));
   }
 }
 

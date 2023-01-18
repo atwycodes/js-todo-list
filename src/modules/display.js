@@ -1,18 +1,17 @@
-class DisplayController {
+import StorageController from './StorageController';
 
+class DisplayController {
   static appendDisplay (array) {
     const body = document.getElementById('content');
-    
-    array.forEach((element,index) => {
-      
-      const toDoContainer = document.createElement('div');
-      toDoContainer.classList.add('container');
+    array.storage.forEach((element,index) => {
+      const taskContainer = document.createElement('div');
+      taskContainer.classList.add('container');
 
-      const toDoTitle = document.createElement('div');
-      toDoTitle.innerHTML = element.title;
+      const taskTitle = document.createElement('div');
+      taskTitle.innerHTML = element.title;
 
-      const toDoDueDate = document.createElement('div');
-      toDoDueDate.innerHTML = element.dueDate;
+      const taskDueDate = document.createElement('div');
+      taskDueDate.innerHTML = element.dueDate;
       
       const removeButton = document.createElement('button');
       removeButton.innerHTML = 'Remove';
@@ -21,10 +20,10 @@ class DisplayController {
         this.refreshDisplay(array);
       });
       
-      body.appendChild(toDoContainer);
-      toDoContainer.appendChild(toDoTitle);
-      toDoContainer.appendChild(toDoDueDate);
-      toDoContainer.appendChild(removeButton);
+      body.appendChild(taskContainer);
+      taskContainer.appendChild(taskTitle);
+      taskContainer.appendChild(taskDueDate);
+      taskContainer.appendChild(removeButton);
     });
   }
 
