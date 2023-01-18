@@ -1,6 +1,191 @@
-#content {
-  display: flex;
-  justify-content: center;
-  gap: 50px;
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+$black: #000000;
+$white: #ffffff;
+$beige: #DDD0C8;
+$dark-grey: #323232;
+$light-grey:#c5c5c5;
+$test: #f10101;
+
+:root {
+  font-family: 'Roboto',sans-serif;
+  font-size: 16px;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+// header
+
+.header {
+  color: $white;
+  background-color: $dark-grey;
+  padding: 20px;
+  font-size: 2rem;
+  font-weight: 900;
+}
+
+// main
+.main {
+  display: flex;
+  min-height: calc(100vh - 36px - 62px);
+}
+
+// navbar
+
+.navbar {
+  width: 300px;
+  min-width: 250px;
+  background-color: $light-grey;
+  display: flex;
+  flex-direction: column;
+  padding: 20px clamp(10px, 2vw, 20px);
+}
+
+.navbar__wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.navbar__item {
+  display: flex;
+  justify-content: flex-start;
+  background-color: $light-grey;
+  color: $black;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 500ms;
+  padding: 10px;
+}
+
+.navbar__item:hover {
+  background-color: $dark-grey;
+  border-radius: 5px;
+  box-shadow: 0px 0px 0px 2px $dark-grey inset;
+  color: $white;
+  transition: all 500ms;
+}
+
+// task-list
+
+.task-list {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex: 1;
+}
+
+.task__wrapper {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+
+
+.task__wrapper:hover > .task__right-section > .task__remove-btn {
+  visibility: visible;
+  opacity: 1;
+  transition: all 300ms;
+}
+
+.task__left-section {
+  display: flex;
+  align-items: center;
+}
+
+.task__right-section {
+  display: flex;
+  align-items: center;
+}
+
+.task__remove-btn {
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  color: $black;
+
+  transition: all 300ms;
+  opacity: 0;
+  visibility: hidden;
+}
+
+
+// footer
+
+.footer {
+  color: $white;
+  background-color: $dark-grey;
+  padding: 10px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+
+  a {
+    color: $white;
+    text-decoration: none;
+    font-weight: 900;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .navbar {
+    background-color: $light-grey;
+    width: auto;
+    min-width: auto;
+  }
+}

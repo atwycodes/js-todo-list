@@ -7,6 +7,7 @@ const x = new Task ('Meet Bob', 'For lunch at 2PM');
 const y = new Task ('Meet Andrew', 'For gym at 3PM', '18/01/2023', 'urgent','gym');
 const z = new Task ('Meet Edward', 'For gym at 6PM', '20/01/2023', 'urgent','gym');
 
+// default behaviour
 const arrayDefault = new StorageController();
 
 arrayDefault.addToStorage(x);
@@ -17,16 +18,12 @@ arrayDefault.addToStorage(z);
 DisplayController.refreshDisplay(arrayDefault);
 arrayDefault.printStorage();
 
-// filter by project name ie: 'gym'
-// project class? 
-// let x = new Project (category)
 
 
-// logic for when a user makes a new project
-const filteredArray = new StorageController();
+// // logic for when a user makes a new project (filters)
+// const filteredArray = new StorageController(arrayDefault.filterCategory('gym'));
 
-filteredArray.storage = arrayDefault.filterCategory('gym');
-DisplayController.refreshDisplay(filteredArray);
+// DisplayController.refreshDisplay(filteredArray);
 
-console.table(filteredArray.storage);
+// console.table(filteredArray.storage);
 

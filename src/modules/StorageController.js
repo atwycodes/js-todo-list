@@ -1,6 +1,6 @@
 class StorageController {
-  constructor() {
-    this.storage = [];
+  constructor(storage = []) {
+    this.storage = storage;
   }
 
   addToStorage (task) {

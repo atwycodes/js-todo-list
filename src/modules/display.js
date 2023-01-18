@@ -5,25 +5,37 @@ class DisplayController {
     const body = document.getElementById('content');
     array.storage.forEach((element,index) => {
       const taskContainer = document.createElement('div');
-      taskContainer.classList.add('container');
+      taskContainer.classList.add('task__wrapper');
+
+      const leftTaskSection = document.createElement('div');
+      leftTaskSection.classList.add('task__left-section');
 
       const taskTitle = document.createElement('div');
+      taskTitle.classList.add('task__title');
       taskTitle.innerHTML = element.title;
 
+      const rightTaskSection = document.createElement('div');
+      rightTaskSection.classList.add('task__right-section');
+
       const taskDueDate = document.createElement('div');
+      taskDueDate.classList.add('task__due-date');
       taskDueDate.innerHTML = element.dueDate;
       
       const removeButton = document.createElement('button');
-      removeButton.innerHTML = 'Remove';
+      removeButton.innerHTML = '✖';
+      removeButton.classList.add('task__remove-btn');
       removeButton.addEventListener('click', () => {
         array.removeFromStorage(index);
         this.refreshDisplay(array);
       });
       
+      leftTaskSection.appendChild(taskTitle);
+      rightTaskSection.appendChild(taskDueDate);
+      rightTaskSection.appendChild(removeButton);
+
       body.appendChild(taskContainer);
-      taskContainer.appendChild(taskTitle);
-      taskContainer.appendChild(taskDueDate);
-      taskContainer.appendChild(removeButton);
+      taskContainer.appendChild(leftTaskSection);
+      taskContainer.appendChild(rightTaskSection);
     });
   }
 
