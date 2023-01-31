@@ -1,3 +1,5 @@
+// css reset
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -10,7 +12,7 @@ table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, canvas, details, embed, 
 figure, figcaption, footer, header, hgroup, 
 menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
+time, mark, audio, video, button {
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -18,29 +20,14 @@ time, mark, audio, video {
 	font: inherit;
 	vertical-align: baseline;
 }
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
-	display: block;
-}
+
 body {
 	line-height: 1;
 }
 ol, ul {
 	list-style: none;
 }
-blockquote, q {
-	quotes: none;
-}
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
-}
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
-}
+
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
@@ -48,144 +35,375 @@ $black: #000000;
 $white: #ffffff;
 $beige: #DDD0C8;
 $dark-grey: #323232;
-$light-grey:#c5c5c5;
+$light-grey:#b4b4b4;
+$accept-green: #23b42a;
+$reject-red: #b85353;
 $test: #f10101;
 
 :root {
   font-family: 'Roboto',sans-serif;
   font-size: 16px;
+  box-sizing: border-box;
+}
+
+button {
+  cursor: pointer;
+}
+
+html,body {
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
 }
 
 body {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
 }
 
-// header
+// mixins
+@mixin FlexColumn {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+@mixin FlexRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+@mixin NavBarDefaultButton {
+  border: solid 1px transparent;
+  border-radius: 15px;
+  background-color: $light-grey;
+  transition: all 300ms;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+@mixin NavBarHoverButton {
+  border: solid 1px $dark-grey;
+  background-color: $dark-grey;
+  color: $white;
+  transition: all 300ms;
+}
+
+@mixin FormDefault{
+  padding: .2rem;
+  border: solid 1px transparent;
+}
+
+@mixin FormFocus {
+  outline: solid 2px $dark-grey;
+}
+
+@mixin FormAddBtnDefault {
+  font-size: 1.2rem;
+  border: solid 1px transparent;
+  border-radius: 15px;
+  transition: all 300ms;
+}
+
+@mixin FormAddBtnHover {
+  border: solid 1px $accept-green;
+  background-color: $accept-green;
+  color: $white;
+  transition: all 300ms;
+}
+
+@mixin FormCancelBtnHover {
+  border: solid 1px $reject-red;
+  background-color: $reject-red;
+  color: $white;
+  transition: all 300ms;
+}
+
+// header & footer 
+@mixin HeaderFooter {
+  background: $dark-grey;
+  color: $white;
+
+  display: flex;
+  align-items: center;
+}
+
+@mixin TaskDefault {
+  padding: .5rem;
+  border: solid 1px transparent;
+  border-radius: 15px;
+  transition: all 300ms;
+  font-size: 1rem;
+}
+
+@mixin TaskHover {
+  border: solid 1px $dark-grey;
+  background-color: $dark-grey;
+  color: $white;
+  transition: all 300ms;
+}
+
+.header,
+.footer {
+  @include HeaderFooter();
+}
 
 .header {
-  color: $white;
-  background-color: $dark-grey;
-  padding: 20px;
+  justify-content: space-between;
+}
+
+.header__title {
   font-size: 2rem;
   font-weight: 900;
+  padding: 1.5rem;
+}
+
+.header__menu {
+  display: none;
+  cursor: pointer;
+  height: 2rem;
+  width: 2rem;
+  padding: 1.5rem;
+}
+
+.footer {
+  font-size: 1rem;
+  font-weight: 600;
+  justify-content: center;
+  padding: .6rem;
+
+  a {
+    text-decoration: none;
+    color: red;
+  }
 }
 
 // main
 .main {
-  display: flex;
-  min-height: calc(100vh - 36px - 62px);
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
+.main > * {
+  padding: 1.2rem;
 }
 
 // navbar
-
 .navbar {
-  width: 300px;
-  min-width: 250px;
+  @include FlexColumn();
   background-color: $light-grey;
-  display: flex;
-  flex-direction: column;
-  padding: 20px clamp(10px, 2vw, 20px);
+  gap: .5rem;
+  min-width: 12rem;
 }
 
-.navbar__wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.navbar > *{
+  @include FlexColumn();
+  gap: .5rem;
 }
 
 .navbar__item {
   display: flex;
   justify-content: flex-start;
-  background-color: $light-grey;
-  color: $black;
-  border: none;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 500ms;
-  padding: 10px;
+  align-items: center;
+  padding: .5rem;
+  @include NavBarDefaultButton()
 }
 
 .navbar__item:hover {
-  background-color: $dark-grey;
-  border-radius: 5px;
-  box-shadow: 0px 0px 0px 2px $dark-grey inset;
-  color: $white;
-  transition: all 500ms;
+  @include NavBarHoverButton();
 }
 
-// task-list
-
-.task-list {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  flex: 1;
-}
-
-.task__wrapper {
+//projects
+.project__wrapper {
   display: flex;
   justify-content: space-between;
-  cursor: pointer;
+  align-items: baseline;
+  @include NavBarDefaultButton();
+  
+  .project__name {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+    padding: .5rem;
+  }
+  
+  .project__remove-btn {
+    background-color: inherit;
+    font-weight: 600;
+    font-size: .9rem;
+    display: none;
+    padding: 0 .5rem;
+  }
 }
 
+.project__wrapper:hover {
+  @include NavBarHoverButton();
 
-
-.task__wrapper:hover > .task__right-section > .task__remove-btn {
-  visibility: visible;
-  opacity: 1;
-  transition: all 300ms;
-}
-
-.task__left-section {
-  display: flex;
-  align-items: center;
-}
-
-.task__right-section {
-  display: flex;
-  align-items: center;
-}
-
-.task__remove-btn {
-  cursor: pointer;
-  background-color: transparent;
-  border: none;
-  color: $black;
-
-  transition: all 300ms;
-  opacity: 0;
-  visibility: hidden;
-}
-
-
-// footer
-
-.footer {
-  color: $white;
-  background-color: $dark-grey;
-  padding: 10px;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-
-  a {
+  .project__remove-btn {
+    display: block;
     color: $white;
-    text-decoration: none;
-    font-weight: 900;
+  }
+}
+
+.active {
+  @include NavBarHoverButton();
+}
+
+// project form
+.project__add-btn {
+  @include NavBarDefaultButton();
+  padding: .5rem;
+}
+
+.project__add-btn:hover {
+  @include NavBarHoverButton();
+}
+
+.project-add-form__wrapper {
+@include FlexColumn();
+  justify-content: center;
+  gap: .3rem;
+
+  display: none;
+
+  .project-add-form__title {
+    @include FormDefault();
+  }
+
+  .project-add-form__title:focus {
+    @include FormFocus();
+  }
+
+  .project-add-form__btn {
+    @include FormAddBtnDefault()
+  }
+
+  .project-add-form__btn:hover {
+    @include FormAddBtnHover()
+  }
+}
+
+// task list
+.task-list {
+  @include FlexColumn();
+  
+  h1 {
+    font-size: 1.6rem;
+    padding: .5rem 0 1rem .5rem; 
+    margin-bottom: 1rem;
+    border-bottom: solid 2px $black;
+  }
+
+  .task-list__wrapper {
+    @include FlexColumn();
+    gap: .5rem;
+  }
+
+  .task__wrapper {
+    @include FlexRow();
+    gap: 1rem;
+
+    @include TaskDefault;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+
+  .task__wrapper:hover {
+    @include TaskHover();
+
+    button {
+      visibility: visible;
+    }
+  }
+
+  .task__wrapper > * {
+    @include FlexRow();
+    align-items: center;
+  }
+
+  .task__title {
+    font-weight: 600;
+  }
+
+  .task__left-section {
+    flex: 1 1 60%;
+  }
+
+  .task__right-section {
+    font-size: .8rem;
+    display: flex;
+    gap: .8rem;
+    
+    button {
+      visibility: hidden;
+      border: none;
+      background-color: inherit;
+      color: inherit;
+    }
+  }
+
+  .task__add-btn {
+    @include NavBarDefaultButton();
+    font-size: 1rem;
+    padding: .5rem 1rem;
+    margin: 0 auto;
+  }
+
+  .task__add-btn:hover {
+    @include NavBarHoverButton();
+  }
+}
+
+.task-add-form__wrapper {
+  @include FlexColumn();
+  margin-top: 1rem;
+  display: none;
+  align-items: center;
+  gap: 1rem;
+}
+
+.task-add-form-input__wrapper {
+  @include FlexRow();
+  font-weight: 600;
+  gap: 1rem;
+}
+
+.task-add-form-btn__wrapper {
+  @include FlexRow();
+  font-weight: 600;
+  gap: 1rem;
+
+  > * {
+    @include FormAddBtnDefault();
+    min-width: 8rem;
+    font-size: 1rem;
+    padding: .4rem .8rem;
+    border-radius: 15px;
+  }
+
+  .task-add-form__btn:hover {
+    @include FormAddBtnHover();
+  }
+
+  .task-cancel-form__btn:hover {
+    @include FormCancelBtnHover();
   }
 }
 
 @media only screen and (max-width: 600px) {
+  .main {
+    grid-template-columns: auto;
+    grid-template-rows: auto 1fr;
+  }
+
   .navbar {
-    background-color: $light-grey;
-    width: auto;
-    min-width: auto;
+    display: none;
+  }
+
+  .header__menu {
+    display: block;
   }
 }
+
