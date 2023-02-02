@@ -1,4 +1,3 @@
-import { format, parseISO } from 'date-fns';
 import menuIcon from '../assets/icons/menu.svg';
 
 class Display {
@@ -26,8 +25,15 @@ class Display {
   }
 
   // Methods for displaying tasks
+  handleEditClick(e, id) {
+    if (e === '') {
+      console.log('???');
+    }
+  }
+
   populateTaskList(todos) {
     const projectTitle = this.createElement('h1', 'task-list__title');
+    
     if (this.storage.currentProjectState !== '') {
       projectTitle.textContent = `${this.storage.currentProjectState}`;
     } else {
@@ -40,15 +46,61 @@ class Display {
 
     todos.forEach((element) => { 
       const taskWrapper = this.createElement('li', 'task__wrapper');
+      taskWrapper.setAttribute('data-id', element.id);
 
       const taskTitle = this.createElement('div', 'task__title' );
       taskTitle.textContent = element.title;
+      taskTitle.setAttribute('data-id', `${element.id} title`);
+      taskTitle.addEventListener('click', () => {
+        console.log(`task title for ${element.id} clicked`);
+        // edit task for title
+        const title = this.getElement(`[data-id = '${element.id} title']`);
+      
+        const editTitle = this.createElement('input', 'task__edit-title');
+        editTitle.setAttribute('type', 'text');
+        editTitle.value = title.textContent;
+        editTitle.addEventListener('blur', () => {
+          this.storage.editTaskTitle(element.id, editTitle.value);
+
+          if (this.storage.currentProjectState !== '') {  
+            const filteredStorage = this.storage.todos.filter((task) => task.project === this.storage.currentProjectState);
+            this.displayTasks(filteredStorage);
+          } else {
+            this.displayTasks(this.storage.todos);
+          }
+        });
+
+        title.replaceWith(editTitle);
+      });
       
       const taskDueDate = this.createElement('div', 'task__due-date');
       taskDueDate.textContent = element.dueDate;
-      
-      const taskEditBtn = this.createElement('button', 'task__edit-btn');
-      taskEditBtn.textContent = 'Edit';
+      taskDueDate.setAttribute('data-id', `${element.id} date`);
+      taskDueDate.addEventListener('click', ()=> {
+        console.log(`task date for ${element.id} clicked`);
+        // edit task for date
+        const date = this.getElement(`[data-id = '${element.id} date']`);
+
+        const editDate = this.createElement('input', 'task__edit-due-date');
+        editDate.setAttribute('type', 'date');
+        editDate.value = date.textContent;
+        editDate.addEventListener('input', () => {
+          this.storage.editTaskDate(element.id, editDate.value);
+
+          if (this.storage.currentProjectState !== '') {  
+            const filteredStorage = this.storage.todos.filter((task) => task.project === this.storage.currentProjectState);
+            this.displayTasks(filteredStorage);
+          } else {
+            this.displayTasks(this.storage.todos);
+          }
+        });
+
+        date.replaceWith(editDate);
+      });
+
+
+
+
 
       const taskRemoveBtn = this.createElement('button', 'task__remove-btn');
       taskRemoveBtn.textContent = 'Remove';
@@ -68,7 +120,7 @@ class Display {
       const taskRightSection = this.createElement('div', 'task__right-section' );
 
       taskLeftSection.append(taskTitle);
-      taskRightSection.append(taskDueDate, taskEditBtn, taskRemoveBtn);
+      taskRightSection.append(taskDueDate, taskRemoveBtn);
       taskWrapper.append(taskLeftSection,taskRightSection);
       todoList.append(taskWrapper);
     });
@@ -82,19 +134,24 @@ class Display {
 
   populateAddTaskForm() {
     const formAddWrapper = this.createElement('form', 'task-add-form__wrapper');
-    const formBtnWrapper = this.createElement('div', 'task-add-form-btn__wrapper');
+    formAddWrapper.append(this.createTaskFormInputElements(), this.createTaskFormAddBtns());
+
+    this.tasksMain.append(formAddWrapper);
+  } 
+
+  createTaskFormInputElements () {
     const formInputWrapper = this.createElement('div', 'task-add-form-input__wrapper');
 
-    const formAddTitle = this.createElement('input', 'task-add-form__title');
-    formAddTitle.setAttribute('type', 'text');
-    formAddTitle.setAttribute('placeholder', '* To do...');
-    formAddTitle.setAttribute('required', '');
+    const formTitle = this.createElement('input', 'task-add-form__title');
+    formTitle.setAttribute('type', 'text');
+    formTitle.setAttribute('placeholder', '* To do...');
+    formTitle.setAttribute('required', '');
 
-    const formAddDueDate = this.createElement('input', 'task-add-form__due-date');
-    formAddDueDate.setAttribute('type', 'date');
-    formAddDueDate.setAttribute('required', '');
+    const formDueDate = this.createElement('input', 'task-add-form__due-date');
+    formDueDate.setAttribute('type', 'date');
+    formDueDate.setAttribute('required', '');
 
-    const formAddPriority = this.createElement('select', 'task-add-form__priority');
+    const formPriority = this.createElement('select', 'task-add-form__priority');
     
     const formLowPriority = this.createElement('option');
     formLowPriority.setAttribute('value', 'low'); 
@@ -109,21 +166,27 @@ class Display {
     formUrgentPriority.setAttribute('value', 'urgent');
     formUrgentPriority.textContent = 'Urgent';
 
-    formAddPriority.append(formLowPriority, formNormalPriority, formUrgentPriority);
+    formPriority.append(formLowPriority, formNormalPriority, formUrgentPriority);
 
+    formInputWrapper.append(formTitle, formDueDate, formPriority);
+
+    return formInputWrapper;
+  }
+
+  createTaskFormAddBtns () {
+    const formBtnWrapper = this.createElement('div', 'task-add-form-btn__wrapper');
+    
     const formAddBtn = this.createElement('button', 'task-add-form__btn');
     formAddBtn.addEventListener('click', () => this.handleAddFormClick());
     formAddBtn.textContent = 'Add Task';
-
+    
     const formCancelBtn = this.createElement('button', 'task-cancel-form__btn');
     formCancelBtn.addEventListener('click', () => this.closeAddTaskForm());
     formCancelBtn.textContent = 'Cancel';
 
-    formInputWrapper.append(formAddTitle, formAddDueDate, formAddPriority);
     formBtnWrapper.append(formAddBtn,formCancelBtn);
-    formAddWrapper.append(formInputWrapper, formBtnWrapper);
 
-    this.tasksMain.append(formAddWrapper);
+    return formBtnWrapper;
   }
 
   displayTasks (todos) {
@@ -164,7 +227,7 @@ class Display {
       const addDueDate = this.getElement('.task-add-form__due-date');
       const addPriority = this.getElement('.task-add-form__priority');
       
-      this.storage.addTask(addTitle.value, format(parseISO(addDueDate.value), 'dd MMM yyyy'), addPriority.value);
+      this.storage.addTask(addTitle.value, addDueDate.value, addPriority.value);
       this.filterDisplayByProject();
     }
   }
@@ -265,20 +328,20 @@ class Display {
     const header = this.getElement('.header');
     const menu = this.createElement('img', 'header__menu');
     menu.src = menuIcon;
-    menu.addEventListener('click', () => this.openNavBar());
+    menu.addEventListener('click', () => this.toggleNavBar());
   
     header.append(menu);
   }
 
-  openNavBar() {
-    console.log('hamburger pls');
+  toggleNavBar() {
     const navBar = this.getElement('.navbar');
-    console.log(navBar.style.display);
+    console.log('toggled');
+    console.log((navBar.classList));
 
-    if (navBar.style.display === 'flex') {
-      navBar.style.display = 'none';
+    if (navBar.classList.toString().includes('navbar-active')) {
+      navBar.classList.remove('navbar-active');
     } else {
-      navBar.style.display = 'flex';
+      navBar.classList.add('navbar-active');
     }
   }
 

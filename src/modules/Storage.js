@@ -1,3 +1,5 @@
+import { format, parseISO } from 'date-fns';
+
 class Storage {
   constructor() {
     this.todos = [
@@ -31,7 +33,7 @@ class Storage {
     const task = {
       id: crypto.randomUUID(),      
       title, 
-      dueDate,
+      dueDate: format(parseISO(dueDate), 'dd MMM yyyy'),
       priority,
       project: this.currentProjectState,
       complete: false
@@ -43,13 +45,27 @@ class Storage {
     this.todos = this.todos.filter((task) => task.id !== id );
   }
 
-  editTask (id, title, dueDate, priority) {
+  editTaskTitle (id, title) {
     this.todos = this.todos.map ((task) => task.id === id ? 
       {
         id: task.id,
         title,
-        dueDate,
-        priority,
+        dueDate: task.dueDate,
+        priority: task.priority,
+        project: task.project,
+        complete: task.complete
+      } 
+      : task
+    );
+  }
+
+  editTaskDate (id, dueDate) {
+    this.todos = this.todos.map ((task) => task.id === id ? 
+      {
+        id: task.id,
+        title: task.title,
+        dueDate: format(parseISO(dueDate), 'dd MMM yyyy'),
+        priority: task.priority,
         project: task.project,
         complete: task.complete
       } 
