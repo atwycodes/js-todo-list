@@ -5,17 +5,17 @@ class Storage {
     this.todos = [
       {
         id: crypto.randomUUID(),
-        title: 'Open/Closing of Forms (All)',
-        dueDate: '26 Jan 2023',
+        title: 'Finish todo list project',
+        dueDate: '3 Feb 2023',
         priority: 'normal',
-        project: '',
+        project: 'Odin',
         complete: false
       },
 
       {
         id: crypto.randomUUID(),
-        title: 'Cleaning up Design (Dog)',
-        dueDate: '26 Jan 2023',
+        title: 'Take the dog out for a walk',
+        dueDate: '4 Feb 2023',
         priority: 'normal',
         project: 'Dog',
         complete: false
@@ -23,10 +23,30 @@ class Storage {
     ];
 
     this.projects = [
-      'Gym', 'Dog', 'Test'
+      'Odin', 'Dog'
     ];
 
     this.currentProjectState = '';
+  }
+
+  initialLocalStorageLoad () {
+    if (!localStorage.initialLoad) {
+      localStorage.setItem('initialLoad', true);
+      localStorage.setItem('todos', JSON.stringify(this.todos));
+      localStorage.setItem('projects', JSON.stringify(this.projects));
+
+    } else {
+      this.todos = JSON.parse(localStorage.getItem('todos'));
+      this.projects = JSON.parse(localStorage.getItem('projects'));
+    }
+  }
+
+  setTodosToLocalStorage() {
+    localStorage.setItem('todos', JSON.stringify(this.todos));
+  }
+
+  setProjectsToLocalStorage() {
+    localStorage.setItem('projects', JSON.stringify(this.projects));
   }
 
   addTask (title, dueDate, priority) {
@@ -39,10 +59,12 @@ class Storage {
       complete: false
     };
     this.todos.push(task); 
+    this.setTodosToLocalStorage();
   }
 
   removeTask (id) {
     this.todos = this.todos.filter((task) => task.id !== id );
+    this.setTodosToLocalStorage();
   }
 
   editTaskTitle (id, title) {
@@ -57,6 +79,7 @@ class Storage {
       } 
       : task
     );
+    this.setTodosToLocalStorage();
   }
 
   editTaskDate (id, dueDate) {
@@ -71,6 +94,7 @@ class Storage {
       } 
       : task
     );
+    this.setTodosToLocalStorage();
   }
 
   toggleTaskComplete (id) {
@@ -85,6 +109,7 @@ class Storage {
       } 
       : task
     );
+    this.setTodosToLocalStorage();
   }
 
   addProject (project) {
@@ -93,11 +118,13 @@ class Storage {
 
     } else {
       this.projects.push(project); 
+      this.setProjectsToLocalStorage();
     }
   }
 
   removeProject (project) {
     this.projects = this.projects.filter((element) => element !== project);
+    this.setProjectsToLocalStorage();
   }
 
   setCurrentProjectState (projectState) {

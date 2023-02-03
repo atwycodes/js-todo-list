@@ -345,10 +345,6 @@ class Display {
     }
   }
 
-  closeNavBar() {
-
-  }
-
   populateNavBar () {
     const allNav = this.createElement('button', 'navbar__item');
     allNav.textContent = 'All Tasks';
@@ -390,6 +386,7 @@ class Display {
   }
 
   initialLoad() {
+    this.storage.initialLocalStorageLoad();
     this.displayNav();
     this.displayProjects(this.storage.projects);
     this.displayTasks(this.storage.todos);
