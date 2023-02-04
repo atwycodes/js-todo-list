@@ -6,6 +6,7 @@ A simple CRUD to-do list project that utilizes localStorage to practice:
 * Usage of ES6 Modules
 * Practice usage of SCSS for styling
 * Using localStorage to store tasks between usage sessions (data not wiped on exit)
+* Usage of Constraint Validation API for custom constraint (for already existing projects)
 
 
 Tech stack used:
