@@ -100,7 +100,7 @@ body {
   outline: solid 2px $dark-grey;
 }
 
-@mixin FormAddBtnDefault {
+@mixin FormBtnDefault {
   font-size: 1.2rem;
   border: solid 1px transparent;
   border-radius: 15px;
@@ -277,11 +277,19 @@ body {
   }
 
   .project-add-form__btn {
-    @include FormAddBtnDefault()
+    @include FormBtnDefault()
   }
 
   .project-add-form__btn:hover {
-    @include FormAddBtnHover()
+    @include FormAddBtnHover();
+  }
+
+  .project-cancel-form__btn {
+    @include FormBtnDefault();
+  }
+
+  .project-cancel-form__btn:hover {
+    @include FormCancelBtnHover();
   }
 }
 
@@ -326,6 +334,11 @@ body {
 
   .task__title {
     font-weight: 600;
+  }
+
+  .task-complete {
+    text-decoration: line-through;
+    opacity: 0.5;
   }
 
   .task__left-section {
@@ -377,7 +390,7 @@ body {
   gap: 1rem;
 
   > * {
-    @include FormAddBtnDefault();
+    @include FormBtnDefault();
     min-width: 8rem;
     font-size: 1rem;
     padding: .4rem .8rem;

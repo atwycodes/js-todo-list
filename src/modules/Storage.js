@@ -112,6 +112,21 @@ class Storage {
     this.setTodosToLocalStorage();
   }
 
+  toggleTaskIncomplete (id) {
+    this.todos = this.todos.map((task) => task.id === id ? 
+      {
+        id: task.id,
+        title: task.title,
+        dueDate: task.dueDate,
+        priority: task.priority,
+        project: task.project,
+        complete: false 
+      } 
+      : task
+    );
+    this.setTodosToLocalStorage();
+  }
+
   addProject (project) {
     if (this.projects.includes(project)) {
       alert (`You already have a project titled ${project}`);

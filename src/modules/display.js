@@ -25,12 +25,6 @@ class Display {
   }
 
   // Methods for displaying tasks
-  handleEditClick(e, id) {
-    if (e === '') {
-      console.log('???');
-    }
-  }
-
   populateTaskList(todos) {
     const projectTitle = this.createElement('h1', 'task-list__title');
     
@@ -52,7 +46,6 @@ class Display {
       taskTitle.textContent = element.title;
       taskTitle.setAttribute('data-id', `${element.id} title`);
       taskTitle.addEventListener('click', () => {
-        console.log(`task title for ${element.id} clicked`);
         // edit task for title
         const title = this.getElement(`[data-id = '${element.id} title']`);
       
@@ -72,12 +65,19 @@ class Display {
 
         title.replaceWith(editTitle);
       });
+
+      const taskToggle = this.createElement ('input', 'task__toggle');
+      taskToggle.setAttribute('type', 'checkbox');
+      taskToggle.setAttribute('data-id',`${element.id} toggle` );
+      taskToggle.addEventListener('click', () => {
+        this.toggleCompletionStatus(element);
+        this.displayTasks(this.storage.todos);
+      });
       
       const taskDueDate = this.createElement('div', 'task__due-date');
       taskDueDate.textContent = element.dueDate;
       taskDueDate.setAttribute('data-id', `${element.id} date`);
       taskDueDate.addEventListener('click', ()=> {
-        console.log(`task date for ${element.id} clicked`);
         // edit task for date
         const date = this.getElement(`[data-id = '${element.id} date']`);
 
@@ -98,10 +98,6 @@ class Display {
         date.replaceWith(editDate);
       });
 
-
-
-
-
       const taskRemoveBtn = this.createElement('button', 'task__remove-btn');
       taskRemoveBtn.textContent = 'Remove';
       taskRemoveBtn.addEventListener('click' , () => {
@@ -119,6 +115,7 @@ class Display {
 
       const taskRightSection = this.createElement('div', 'task__right-section' );
 
+      taskLeftSection.append(taskToggle);
       taskLeftSection.append(taskTitle);
       taskRightSection.append(taskDueDate, taskRemoveBtn);
       taskWrapper.append(taskLeftSection,taskRightSection);
@@ -130,6 +127,30 @@ class Display {
     taskAddBtn.addEventListener('click', () => this.openAddTaskForm());
 
     todoList.append(taskAddBtn);
+  }
+
+  toggleCompletionStatus (task) {
+    if (task.complete === false) {
+      this.storage.toggleTaskComplete(task.id); 
+
+    } else if (task.complete === true) {
+      this.storage.toggleTaskIncomplete(task.id);
+    }
+  }
+
+  setToggleDisplay (task) {
+    this.storage.todos.forEach( (task) => {
+      const toggle = this.getElement(`[data-id = '${task.id} toggle']`);
+      const title = this.getElement(`[data-id = '${task.id} title']`);
+      if (task.complete === false) {
+        toggle.checked = false;
+        title.classList.remove('task-complete');
+
+      } else if (task.complete === true) {
+        toggle.checked = true;
+        title.classList.add('task-complete');
+      }
+    });
   }
 
   populateAddTaskForm() {
@@ -196,6 +217,7 @@ class Display {
     }
     this.populateTaskList(todos);
     this.populateAddTaskForm();
+    this.setToggleDisplay();
   }
 
   openAddTaskForm () {
@@ -203,7 +225,6 @@ class Display {
     const taskAddBtn = this.getElement('.task__add-btn');
     form.style.display = 'flex';
     taskAddBtn.style.display = 'none';
-    console.log('opened form, hide + button');
   }
 
   closeAddTaskForm () {
@@ -211,7 +232,6 @@ class Display {
     const taskAddBtn = this.getElement('.task__add-btn');
     form.style.display = 'none';
     taskAddBtn.style.display = 'block';
-    console.log('close form, show + button');
   }
 
   handleAddFormClick () {
@@ -315,7 +335,6 @@ class Display {
       form.reportValidity();
     } else {
       event.preventDefault();
-      console.log('form add button clicked');
       const title = this.getElement('.project-add-form__title');
       
       this.storage.addProject(title.value);
@@ -335,8 +354,6 @@ class Display {
 
   toggleNavBar() {
     const navBar = this.getElement('.navbar');
-    console.log('toggled');
-    console.log((navBar.classList));
 
     if (navBar.classList.toString().includes('navbar-active')) {
       navBar.classList.remove('navbar-active');
