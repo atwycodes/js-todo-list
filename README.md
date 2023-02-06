@@ -19,5 +19,6 @@ Tech stack used:
 Features:
 * Sorting of tasks by user-defined project categories
 * Editing tasks title and due dates
+* Toggle completion of tasks
 * Task removal
 * localStorage for keeping tasks on browser close
