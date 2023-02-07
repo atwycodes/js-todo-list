@@ -46,6 +46,9 @@ class Display {
       taskTitle.textContent = element.title;
       taskTitle.setAttribute('data-id', `${element.id} title`);
       taskTitle.addEventListener('click', () => {
+        if (element.complete) {
+          return;
+        }
         // edit task for title
         const title = this.getElement(`[data-id = '${element.id} title']`);
       
@@ -66,6 +69,8 @@ class Display {
         title.replaceWith(editTitle);
       });
 
+      const toggleLabel = this.createElement('label', 'task__toggle-wrapper' );
+
       const taskToggle = this.createElement ('input', 'task__toggle');
       taskToggle.setAttribute('type', 'checkbox');
       taskToggle.setAttribute('data-id',`${element.id} toggle` );
@@ -78,6 +83,9 @@ class Display {
       taskDueDate.textContent = element.dueDate;
       taskDueDate.setAttribute('data-id', `${element.id} date`);
       taskDueDate.addEventListener('click', ()=> {
+        if (element.complete) {
+          return;
+        }
         // edit task for date
         const date = this.getElement(`[data-id = '${element.id} date']`);
 
@@ -115,7 +123,8 @@ class Display {
 
       const taskRightSection = this.createElement('div', 'task__right-section' );
 
-      taskLeftSection.append(taskToggle);
+      toggleLabel.append(taskToggle);
+      taskLeftSection.append(toggleLabel);
       taskLeftSection.append(taskTitle);
       taskRightSection.append(taskDueDate, taskRemoveBtn);
       taskWrapper.append(taskLeftSection,taskRightSection);
@@ -142,13 +151,16 @@ class Display {
     this.storage.todos.forEach( (task) => {
       const toggle = this.getElement(`[data-id = '${task.id} toggle']`);
       const title = this.getElement(`[data-id = '${task.id} title']`);
+      const date = this.getElement(`[data-id = '${task.id} date']`);
       if (task.complete === false) {
         toggle.checked = false;
         title.classList.remove('task-complete');
+        date.classList.remove('task-complete');
 
       } else if (task.complete === true) {
         toggle.checked = true;
         title.classList.add('task-complete');
+        date.classList.add('task-complete');
       }
     });
   }

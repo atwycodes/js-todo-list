@@ -176,7 +176,7 @@ body {
 
   a {
     text-decoration: none;
-    color: red;
+    color: $reject-red;
   }
 }
 
@@ -270,6 +270,8 @@ body {
 
   .project-add-form__title {
     @include FormDefault();
+    border-radius: .5rem;
+    padding: .2rem;
   }
 
   .project-add-form__title:focus {
@@ -277,7 +279,11 @@ body {
   }
 
   .project-add-form__btn {
-    @include FormBtnDefault()
+    @include FormBtnDefault();
+    min-width: 8rem;
+    font-size: 1rem;
+    padding: .2rem;
+    border-radius: .5rem;
   }
 
   .project-add-form__btn:hover {
@@ -286,6 +292,10 @@ body {
 
   .project-cancel-form__btn {
     @include FormBtnDefault();
+    min-width: 8rem;
+    font-size: 1rem;
+    padding: .2rem;
+    border-radius: .5rem;
   }
 
   .project-cancel-form__btn:hover {
@@ -341,8 +351,44 @@ body {
     opacity: 0.5;
   }
 
+  .task__toggle-wrapper {
+  }
+
+  .task__toggle {
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: $white;
+    margin: 0;
+    font: inherit;
+    color: $accept-green;
+    width: 1.2rem;
+    height: 1.2rem;
+    border: 0.15em solid $black;
+    border-radius: 50%;
+
+    display: grid;
+    place-content: center;
+  }
+
+  .task__toggle::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em $dark-grey;
+    transform-origin: center;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  }
+
+  .task__toggle:checked::before {
+    transform: scale(1);
+  }
+
   .task__left-section {
     flex: 1 1 60%;
+    display: flex;
+    gap: .5rem;
   }
 
   .task__right-section {
@@ -382,6 +428,12 @@ body {
   @include FlexRow();
   font-weight: 600;
   gap: 1rem;
+
+  > * {
+    padding: 0.2rem;
+    border: solid 1px $black;
+    border-radius: 0.5rem;
+  }
 }
 
 .task-add-form-btn__wrapper {

@@ -9,7 +9,7 @@ class Storage {
         dueDate: '3 Feb 2023',
         priority: 'normal',
         project: 'Odin',
-        complete: false
+        complete: true
       },
 
       {
