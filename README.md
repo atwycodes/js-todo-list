@@ -1,6 +1,8 @@
 
 # To-Do List
 
+[Live Website](https://atwycodes.github.io/js-todo-list/)
+
 A simple CRUD to-do list project that utilizes localStorage to practice: 
 * Using Webpack to bundle development code (JS, SCSS, Assets) for production.
 * Usage of ES6 Modules
